@@ -1,5 +1,5 @@
 # Pyoptics
-An python library for optical diffraction simulation 
+A simple and easy-modified python library for optical diffraction simulation 
 
 define optical path with `class OpticsLayer` and build system with `class OpticsSystem`
 
