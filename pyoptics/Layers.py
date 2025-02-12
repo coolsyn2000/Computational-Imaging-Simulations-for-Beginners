@@ -23,10 +23,13 @@ class OpticsLayer:
         """
         raise NotImplementedError("This method should be overridden by subclasses.")
 
-    def modulated_field(self, modulation):
-        if self.field.shape != modulation.shape:
-            raise ValueError(f"field-array shape do not match: {self.field.shape} 和 {modulation.shape}")
-        self.field = self.initial_field * modulation
+    def modulated_field(self, modulation_list):
+        if self.field.shape != modulation_list[0].shape:
+            raise ValueError(f"field-array shape do not match: {self.field.shape} 和 {modulation_list[0].shape}")
+        self.field = self.initial_field
+
+        for i in range(len(modulation_list)):
+            self.field = self.field * modulation_list[i]
 
     def angular_propagation(self, distance):
         U0_fft = np.fft.fftshift(np.fft.fft2(self.field))
@@ -62,17 +65,27 @@ class LensLayer(OpticsLayer):
 
     def init_field(self):
         self.initial_field = np.exp(-1j * np.pi / (self.wavelength * self.focal_length) * (self.X ** 2 + self.Y ** 2))
-
+        self.field= self.initial_field
 
 class GaussianBeamLayer(OpticsLayer):
-    def __init__(self, L, N, wavelength, radius):
+    def __init__(self, L, N, wavelength, radius, angleX=0, angleY=0):
         super().__init__(L, N, wavelength)
         self.radius = radius
+        self.angleX= angleX
+        self.angleY= angleY
         self.init_field()
-        self.modulated_field(np.ones((N, N), dtype=np.complex64))
+        #self.modulated_field([np.ones((N, N), dtype=np.complex64)])
 
     def init_field(self):
-        self.initial_field = np.exp(-(self.X ** 2 + self.Y ** 2) / self.radius ** 2)
+
+        k = 2 * np.pi / self.wavelength  # 波数
+
+        # 根据入射角计算相位
+        phase = k * (self.X * np.sin(self.angleX) + self.Y * np.sin(self.angleY))
+
+        self.initial_field = np.exp(-(self.X ** 2 + self.Y ** 2) / self.radius ** 2) * np.exp(1j * phase)
+
+        self.field = self.initial_field
 
 
 class ApertureLayer(OpticsLayer):
@@ -84,6 +97,7 @@ class ApertureLayer(OpticsLayer):
     def init_field(self):
         self.initial_field[np.sqrt(self.X ** 2 + self.Y ** 2) <= self.radius] = 1
         self.initial_field[np.sqrt(self.X ** 2 + self.Y ** 2) > self.radius] = 0
+        self.field = self.initial_field
 
 
 class ObjectLayer(OpticsLayer):
@@ -91,12 +105,12 @@ class ObjectLayer(OpticsLayer):
         super().__init__(L, N, wavelength)
         self.mag, self.pha = mag, pha
         self.init_field()
-        self.modulated_field(np.ones((N, N), dtype=np.complex64))
+        self.modulated_field([np.ones((N, N), dtype=np.complex64)])
 
     def init_field(self):
 
         if self.mag is None:
-            self.mag = np.zeros((self.N, self.N))
+            self.mag = np.ones((self.N, self.N))
         elif self.field.shape != self.mag.shape:
             raise ValueError(f"field-array shape do not match: {self.field.shape} 和 {self.mag.shape}")
 
@@ -106,3 +120,18 @@ class ObjectLayer(OpticsLayer):
             raise ValueError(f"field-array shape do not match: {self.field.shape} 和 {self.pha.shape}")
 
         self.initial_field = self.mag * np.exp(1j * self.pha)
+        self.field = self.initial_field
+
+
+class RefractionLayer(OpticsLayer):
+    def __init__(self, L, N, wavelength, angleX=0, angleY=0):
+        super().__init__(L, N, wavelength)
+        self.angleX = angleX
+        self.angleY = angleY
+        self.init_field()
+
+    def init_field(self):
+        k = 2 * np.pi / self.wavelength
+        phase = k * (self.X * np.sin(self.angleX) + self.Y * np.sin(self.angleY))
+        self.initial_field = np.exp(1j * phase)
+        self.field = self.initial_field

@@ -10,7 +10,7 @@ def main():
     apertureLayer = pyoptics.ApertureLayer(L=512 * 1e-6, N=512, wavelength=532e-9, radius=100e-6)
     lensLayer2 = pyoptics.LensLayer(L=512 * 1e-6, N=512, wavelength=532e-9, focal_length=5e-3)
 
-    Layers_list = [sourceLayer, lensLayer, apertureLayer, lensLayer2]
+    Layers_list = [[sourceLayer], [lensLayer], [apertureLayer], [lensLayer2]]
     Distance_list = [5e-3, 5e-3, 5e-3, 5e-3]
 
     four_f_system = pyoptics.OpticsSystem(Layers_list, Distance_list)
