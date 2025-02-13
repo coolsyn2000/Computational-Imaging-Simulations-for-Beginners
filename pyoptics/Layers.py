@@ -100,7 +100,7 @@ class ApertureLayer(OpticsLayer):
         self.field = self.initial_field
 
 
-class ObjectLayer(OpticsLayer):
+class CustomLayer(OpticsLayer):
     def __init__(self, L, N, wavelength, mag=None, pha=None):
         super().__init__(L, N, wavelength)
         self.mag, self.pha = mag, pha
@@ -135,3 +135,5 @@ class RefractionLayer(OpticsLayer):
         phase = k * (self.X * np.sin(self.angleX) + self.Y * np.sin(self.angleY))
         self.initial_field = np.exp(1j * phase)
         self.field = self.initial_field
+
+
