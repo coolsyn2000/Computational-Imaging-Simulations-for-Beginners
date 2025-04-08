@@ -47,7 +47,7 @@ class OpticsLayer:
         z_ind = np.arange(0, number_of_steps)
         z_step = distance / number_of_steps
         z = z_ind * z_step
-        propagation_field_along_z = np.zeros((len(z_ind), 512, 512), dtype=np.complex64)
+        propagation_field_along_z = np.zeros((len(z_ind), self.N, self.N), dtype=np.complex64)
         propagation_field_along_z[0] = np.abs(self.field)
 
         for ind in z_ind[1:]:
@@ -86,7 +86,6 @@ class GaussianBeamLayer(OpticsLayer):
         self.initial_field = np.exp(-(self.X ** 2 + self.Y ** 2) / self.radius ** 2) * np.exp(1j * phase)
 
         self.field = self.initial_field
-
 
 class ApertureLayer(OpticsLayer):
     def __init__(self, L, N, wavelength, radius):
