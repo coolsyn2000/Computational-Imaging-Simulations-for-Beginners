@@ -87,6 +87,24 @@ class GaussianBeamLayer(OpticsLayer):
 
         self.field = self.initial_field
 
+class PlaneWaveLayer(OpticsLayer):
+    def __init__(self, L, N, wavelength, angleX=0, angleY=0):
+        super().__init__(L, N, wavelength)
+        self.angleX = angleX
+        self.angleY = angleY
+        self.init_field()
+
+    def init_field(self):
+        k = 2 * np.pi / self.wavelength  # 波数
+
+        # 根据入射角计算相位
+        phase = k * (self.X * np.sin(self.angleX) + self.Y * np.sin(self.angleY))
+
+        # 理想准直光束的复振幅分布
+        self.initial_field = np.exp(1j * phase)
+
+        self.field = self.initial_field
+
 class ApertureLayer(OpticsLayer):
     def __init__(self, L, N, wavelength, radius):
         super().__init__(L, N, wavelength)
