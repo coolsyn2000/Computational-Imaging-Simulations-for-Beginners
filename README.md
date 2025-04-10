@@ -34,7 +34,8 @@ field_at_z = four_f_system.field_propagation(z)
 
 ## Example
 There are several examples in "./examples", which are presented in Jupyter Notebooks with code and markdown clearly.
-01. Gaussian beam propagation in 4f system
-02. Memory effect scattering speckle
+01. Gaussian beam propagation in 4f system (coherent)
+02. Memory effect scattering speckle (partially coherent)
+03. Incoherent FZA lensless imaging (incoherent)
 
 
