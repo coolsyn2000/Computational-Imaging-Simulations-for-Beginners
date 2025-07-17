@@ -8,11 +8,13 @@
 
 There are several examples in `./simulation_scripts`, which are presented in Jupyter Notebooks with code and markdown clearly.
 
-01. Gaussian beam propagation in 4f system (coherent)
+01. Gaussian Beam Propagation in 4f System
 
-02. Memory effect scattering speckle imaging (partially coherent)
+02. Memory Effect Scattering Speckle Imaging
 
-03. Incoherent Fresnel Zone Aperture lensless imaging (incoherent)
+03. Incoherent Fresnel Zone Aperture Lensless Imaging
+
+04. Ghost Imaging and Model-driven Neural Network Algorithm
 
 ## Pyoptics Lib
 define optical path with `class OpticsLayer` and build system with `class OpticsSystem`
