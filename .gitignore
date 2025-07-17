@@ -1,3 +1,6 @@
 .idea
 /pyoptics/__pycache__/
-/examples/.ipynb_checkpoints
+/pyoptics/.idea/
+/simulation_scripts/.ipynb_checkpoints/
+/simulation_scripts/.idea/
+/simulation_scripts/__pycache__/
