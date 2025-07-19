@@ -16,6 +16,8 @@ There are several examples in `./simulation_scripts`, which are presented in Jup
 
 04. Ghost Imaging and Model-driven Neural Network Algorithm
 
+05. Fourier Ptychographic Imaging and Its Reconstruction
+
 ## Pyoptics Lib
 define optical path with `class OpticsLayer` and build system with `class OpticsSystem`
 
